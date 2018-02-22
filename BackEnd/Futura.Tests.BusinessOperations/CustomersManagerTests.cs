@@ -23,15 +23,17 @@ namespace Futura.Tests.BusinessOperations
             MappingConfigurations.Configure();
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void Add_AddNewCustomer_ReturnsViewModel(bool isNull)
+   
+
+        [TestCase(true)] // passing null
+        [TestCase(false)] // passing binding model
+        public void Add_WhenCalled_ReturnsViewModelOfAddedCustomer(bool bindingModelIsNull)
         {
             //Arrange
             _unitOfWork.Setup(x => x.RepositoryFor<Entities.Customer>().Insert(It.IsAny<Entities.Customer>())).Returns<Entities.Customer>(x => x);
 
             //Act
-            ViewModels.Customer actFunc() => _customersManager.Add(isNull ? null : new BindingModels.Customer()
+            ViewModels.Customer func() => _customersManager.Add(bindingModelIsNull ? null : new BindingModels.Customer()
             {
                 CustomerId = "GREAL",
                 CompanyName = "Great Lakes Food Market",
@@ -44,21 +46,22 @@ namespace Futura.Tests.BusinessOperations
             });
           
             //Assert
-            if(isNull)
-                Assert.That(() => actFunc(),Throws.TypeOf<ArgumentNullException>());
+            if(bindingModelIsNull)
+                Assert.That(() => func(),Throws.TypeOf<ArgumentNullException>());
             else
-                Assert.IsNotNull(actFunc());
+                Assert.IsNotNull(func());
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void Update_UpdateCustomer_ReturnsTrue(bool isNull)
+
+        [TestCase(true)] // passing null
+        [TestCase(false)] // passing binding model
+        public void Update_WhenCalled_ReturnsBoolean(bool bindingModelIsNull)
         {
             //Arrange
-            _unitOfWork.Setup(x => x.RepositoryFor<Entities.Customer>().Update(It.IsAny<Entities.Customer>())).Returns(!isNull);
+            _unitOfWork.Setup(x => x.RepositoryFor<Entities.Customer>().Update(It.IsAny<Entities.Customer>())).Returns(!bindingModelIsNull);
 
             //Act
-            var result = _customersManager.Update(isNull ? null : new BindingModels.Customer()
+            bool func() => _customersManager.Update(bindingModelIsNull ? null : new BindingModels.Customer()
             {
                 CustomerId = "GREAL",
                 CompanyName = "Great Lakes Food Market",
@@ -71,7 +74,30 @@ namespace Futura.Tests.BusinessOperations
             });
 
             //Assert
-            Assert.IsTrue(result != isNull);
+            if (bindingModelIsNull)
+                Assert.That(() => func(), Throws.TypeOf<ArgumentNullException>());
+            else
+                Assert.IsTrue(func());
         }
+
+
+        [TestCase(true)] // passing empty id
+        [TestCase(false)] // passing customer id
+        public void Delete_WhenCalled_ReturnsBoolean(bool isEmptyGuid)
+        {
+            //Arrange
+            _unitOfWork.Setup(x => x.RepositoryFor<Entities.Customer>().Delete(Guid.NewGuid())).Returns(!isEmptyGuid);
+
+            //Act
+            bool func() => _customersManager.Delete(isEmptyGuid ? Guid.Empty : Guid.NewGuid());
+
+            //Assert
+            if (isEmptyGuid)
+                Assert.That(() => func(), Throws.TypeOf<ArgumentNullException>());
+            else
+                Assert.IsFalse(func());
+        }
+
+
     }
 }

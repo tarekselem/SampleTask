@@ -25,6 +25,8 @@ namespace Futura.BusinessOperations.Implementations
         #region Interface Implementation     
         public ViewModels.Order Add(BindingModels.Order orderBindingModel)
         {
+            if (orderBindingModel == null) throw new ArgumentNullException(nameof(orderBindingModel));
+
             var orderEntity = AutoMapper.Mapper.Map<Entities.Order>(orderBindingModel);
             var addedOrder = _unitOfWork.RepositoryFor<Entities.Order>().Insert(orderEntity);
             _unitOfWork.SaveChanges();
@@ -34,6 +36,8 @@ namespace Futura.BusinessOperations.Implementations
 
         public bool Delete(Guid id)
         {
+            if (Guid.Empty == id) throw new ArgumentNullException(nameof(id));
+
             bool result = _unitOfWork.RepositoryFor<Entities.Order>().Delete(id);
             if (result) _unitOfWork.SaveChanges();
 
@@ -70,6 +74,8 @@ namespace Futura.BusinessOperations.Implementations
 
         public bool Update(BindingModels.Order orderBindingModel)
         {
+            if (orderBindingModel == null) throw new ArgumentNullException(nameof(orderBindingModel));
+
             var orderEntity = AutoMapper.Mapper.Map<Entities.Order>(orderBindingModel);
             bool result = _unitOfWork.RepositoryFor<Entities.Order>().Update(orderEntity);
 

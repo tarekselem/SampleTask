@@ -72,12 +72,17 @@ namespace Futura.BusinessOperations.Implementations
             return _unitOfWork.RepositoryFor<Entities.Order>().Get(o => o.Customer.CustomerId.ToLower() == customerId.ToLower() && o.OrderDate == orderDate).Any();
         }
 
-        private bool CustomerFound(string customerId)
+        private bool IsCustomerFound(string customerId)
         {
             return _unitOfWork.RepositoryFor<Entities.Customer>().Get(c => c.CustomerId.ToLower() == customerId.ToLower()).Any();
         }
 
-        public List<Entities.Customer> InsertXmlCustomers(List<XmlModels.Customer> customers)
+        private Guid GetCustomerGuid(string customerId)
+        {
+            return _unitOfWork.RepositoryFor<Entities.Customer>().Get(filter: filter => filter.CustomerId.ToLower() == customerId.ToLower()).Select(selector => selector.Id).FirstOrDefault();
+        }
+
+        public int InsertXmlCustomers(List<XmlModels.Customer> customers)
         {
             var customersToInsert = new List<Entities.Customer>();
 
@@ -90,13 +95,14 @@ namespace Futura.BusinessOperations.Implementations
                 var customerEntity = Mapper.Map<Entities.Customer>(customer);
                 customersToInsert.Add(customerEntity);
             }
-            _unitOfWork.RepositoryFor<Entities.Customer>().BulkInsert(customersToInsert);
-            _unitOfWork.SaveChanges();
 
-            return customersToInsert;
+            _unitOfWork.RepositoryFor<Entities.Customer>().BulkInsert(customersToInsert);
+            if (customersToInsert.Count > 0) _unitOfWork.SaveChanges();
+
+            return customersToInsert.Count;
         }
 
-        private List<Entities.Order> InsertXmlOrders(List<XmlModels.Order> orders)
+        private int InsertXmlOrders(List<XmlModels.Order> orders)
         {
             var ordersToInsert = new List<Entities.Order>();
 
@@ -106,7 +112,7 @@ namespace Futura.BusinessOperations.Implementations
                 if (OrderIsExist(order.CustomerID, order.OrderDate)) continue;
 
                 //Check if order customer not found
-                if (!CustomerFound(order.CustomerID)) continue;
+                if (!IsCustomerFound(order.CustomerID)) continue;
 
                 //GetHashCode customerGuid
                 order.CustomerGuid = GetCustomerGuid(order.CustomerID);
@@ -114,16 +120,14 @@ namespace Futura.BusinessOperations.Implementations
                 var orderEntity = Mapper.Map<Entities.Order>(order);
                 ordersToInsert.Add(orderEntity);
             }
+
             _unitOfWork.RepositoryFor<Entities.Order>().BulkInsert(ordersToInsert);
-            _unitOfWork.SaveChanges();
+            if (ordersToInsert.Count>0) _unitOfWork.SaveChanges();
 
-            return ordersToInsert;
+            return ordersToInsert.Count;
         }
 
-        private Guid GetCustomerGuid(string customerId)
-        {
-            return _unitOfWork.RepositoryFor<Entities.Customer>().Get(filter: filter => filter.CustomerId.ToLower() == customerId.ToLower()).Select(selector => selector.Id).FirstOrDefault();
-        }
+        
 
         #endregion
 
