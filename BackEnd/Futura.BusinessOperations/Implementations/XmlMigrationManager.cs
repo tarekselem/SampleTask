@@ -77,7 +77,7 @@ namespace Futura.BusinessOperations.Implementations
             return _unitOfWork.RepositoryFor<Entities.Customer>().Get(c => c.Id.ToLower() == customerId.ToLower()).Any();
         }
 
-        private List<Entities.Customer> InsertXmlCustomers(List<XmlModels.Customer> customers)
+        public List<Entities.Customer> InsertXmlCustomers(List<XmlModels.Customer> customers)
         {
             var customersToInsert = new List<Entities.Customer>();
 

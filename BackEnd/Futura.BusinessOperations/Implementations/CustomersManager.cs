@@ -58,6 +58,7 @@ namespace Futura.BusinessOperations.Implementations
 
         public ViewModels.Customer Add(BindingModels.Customer customerBindingModel)
         {
+            if (customerBindingModel == null) throw new ArgumentNullException(nameof(customerBindingModel));
             var customerEntity = AutoMapper.Mapper.Map<Entities.Customer>(customerBindingModel);
             var addedCustomer = _unitOfWork.RepositoryFor<Entities.Customer>().Insert(customerEntity);
             _unitOfWork.SaveChanges();
