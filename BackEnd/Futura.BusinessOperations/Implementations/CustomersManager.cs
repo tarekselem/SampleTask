@@ -45,10 +45,10 @@ namespace Futura.BusinessOperations.Implementations
             return new ViewModels.CustomersList { Items = items, Total = total };
         }
 
-        public ViewModels.CustomerDetails GetCustomerById(string id)
+        public ViewModels.CustomerDetails GetCustomerById(Guid id)
         {
-            var includedProperties = new List<Expression<Func<Entities.Customer, object>>>() { c=>c.Orders};
-            var customerEntity = _unitOfWork.RepositoryFor<Entities.Customer>().Get(filter:c=>c.Id.ToLower()==id.ToLower(),includedProperties: includedProperties).FirstOrDefault();
+            var includedProperties = new List<Expression<Func<Entities.Customer, object>>>() { c => c.Orders };
+            var customerEntity = _unitOfWork.RepositoryFor<Entities.Customer>().Get(filter: c => c.Id == id, includedProperties: includedProperties).FirstOrDefault();
 
             if (customerEntity == null) return null;
 
@@ -76,7 +76,7 @@ namespace Futura.BusinessOperations.Implementations
             return result;
         }
 
-        public bool Delete(string id)
+        public bool Delete(Guid id)
         {
             bool result = _unitOfWork.RepositoryFor<Entities.Customer>().Delete(id);
             if (result) _unitOfWork.SaveChanges();

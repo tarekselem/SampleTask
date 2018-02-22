@@ -1,4 +1,5 @@
 ﻿using Futura.BusinessOperations.Interfaces;
+using System;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -27,7 +28,7 @@ namespace Futura.Services.API.Controllers
         }
 
         [HttpGet(), Route("{id}")]
-        public IHttpActionResult Get(string id)
+        public IHttpActionResult Get(Guid id)
         {
             var result = _customersManager.GetCustomerById(id);
             if (result == null) return NotFound();
@@ -47,7 +48,7 @@ namespace Futura.Services.API.Controllers
 
         #region PUT Actions
         [HttpPut, Route("{id}")]
-        public IHttpActionResult Put([FromUri]string id, [FromBody] BindingModels.Customer customerBindingModel)
+        public IHttpActionResult Put([FromUri]Guid id, [FromBody] BindingModels.Customer customerBindingModel)
         {
             if (id != customerBindingModel.Id) return BadRequest("Customer ID is not same.");
 
@@ -61,7 +62,7 @@ namespace Futura.Services.API.Controllers
         #region DELETE Actions
         [HttpDelete]
         [Route("{id}")]
-        public IHttpActionResult Delete(string id)
+        public IHttpActionResult Delete(Guid id)
         {
             bool result = _customersManager.Delete(id);
 

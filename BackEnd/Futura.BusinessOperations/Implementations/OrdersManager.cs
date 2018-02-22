@@ -86,13 +86,13 @@ namespace Futura.BusinessOperations.Implementations
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                predicate = predicate.And(s => s.CustomerId.ToLower().Contains(keyword.ToLower()));
-                predicate = predicate.And(s => s.ShipAddress.ToLower().Contains(keyword.ToLower()));
-                predicate = predicate.And(s => s.ShipCity.ToLower().Contains(keyword.ToLower()));
-                predicate = predicate.And(s => s.ShipCountry.ToLower().Contains(keyword.ToLower()));
-                predicate = predicate.And(s => s.ShipName.ToLower().Contains(keyword.ToLower()));
-                predicate = predicate.And(s => s.ShipPostalCode.ToLower().Contains(keyword.ToLower()));
-                predicate = predicate.And(s => s.ShipRegion.ToLower().Contains(keyword.ToLower()));
+                predicate = predicate.And(o => o.Customer.CustomerId.ToLower().Contains(keyword.ToLower()));
+                predicate = predicate.And(o => o.ShipAddress.ToLower().Contains(keyword.ToLower()));
+                predicate = predicate.And(o => o.ShipCity.ToLower().Contains(keyword.ToLower()));
+                predicate = predicate.And(o => o.ShipCountry.ToLower().Contains(keyword.ToLower()));
+                predicate = predicate.And(o => o.ShipName.ToLower().Contains(keyword.ToLower()));
+                predicate = predicate.And(o => o.ShipPostalCode.ToLower().Contains(keyword.ToLower()));
+                predicate = predicate.And(o => o.ShipRegion.ToLower().Contains(keyword.ToLower()));
             }
 
             return predicate;

@@ -33,7 +33,7 @@ namespace Futura.Tests.BusinessOperations
             //Act
             ViewModels.Customer actFunc() => _customersManager.Add(isNull ? null : new BindingModels.Customer()
             {
-                Id = "GREAL",
+                CustomerId = "GREAL",
                 CompanyName = "Great Lakes Food Market",
                 ContactName = "Howard Snyder",
                 ContactTile = "Marketing Manager",
@@ -60,7 +60,7 @@ namespace Futura.Tests.BusinessOperations
             //Act
             var result = _customersManager.Update(isNull ? null : new BindingModels.Customer()
             {
-                Id = "GREAL",
+                CustomerId = "GREAL",
                 CompanyName = "Great Lakes Food Market",
                 ContactName = "Howard Snyder",
                 ContactTile = "Marketing Manager",

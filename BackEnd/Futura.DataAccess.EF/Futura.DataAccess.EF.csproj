@@ -64,6 +64,10 @@
     <Compile Include="Migrations\201802201515132_SetShippedDateNullable.Designer.cs">
       <DependentUpon>201802201515132_SetShippedDateNullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802221420128_AddCustomerId.cs" />
+    <Compile Include="Migrations\201802221420128_AddCustomerId.Designer.cs">
+      <DependentUpon>201802221420128_AddCustomerId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
@@ -95,6 +99,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802201515132_SetShippedDateNullable.resx">
       <DependentUpon>201802201515132_SetShippedDateNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802221420128_AddCustomerId.resx">
+      <DependentUpon>201802221420128_AddCustomerId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

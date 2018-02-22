@@ -34,18 +34,7 @@ namespace Futura.BusinessOperations.Implementations
             XmlModels.Customers customers;
             XmlModels.Orders orders;
 
-            //using (StreamReader reader = new StreamReader(xmlFilePath))
-            //{
-            //    XmlSerializer serializer = new XmlSerializer(typeof(XmlModels.Root));
-            //    var deserializedXmlRoot = (XmlModels.Root)serializer.Deserialize(reader);
-            //    customers = deserializedXmlRoot.Customers.Customer;
-            //    orders = deserializedXmlRoot.Orders.Order;
-
-            //    //check if has data
-            //    if (customers == null && orders == null) throw new Exception("No Customers nor Orders XML data found.");
-            //}
-
-            using (TextReader reader = new StringReader(xmlData))
+            using (StreamReader reader = new StreamReader(xmlData))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(XmlModels.Root));
                 var deserializedXmlRoot = (XmlModels.Root)serializer.Deserialize(reader);
@@ -56,6 +45,17 @@ namespace Futura.BusinessOperations.Implementations
                 if (customers == null && orders == null) throw new Exception("No Customers nor Orders XML data found.");
             }
 
+            //using (TextReader reader = new StringReader(xmlData))
+            //{
+            //    XmlSerializer serializer = new XmlSerializer(typeof(XmlModels.Root));
+            //    var deserializedXmlRoot = (XmlModels.Root)serializer.Deserialize(reader);
+            //    customers = deserializedXmlRoot.Customers;
+            //    orders = deserializedXmlRoot.Orders;
+
+            //    //check if has data
+            //    if (customers == null && orders == null) throw new Exception("No Customers nor Orders XML data found.");
+            //}
+
             InsertXmlCustomers(customers.Customer);
             InsertXmlOrders(orders.Order);
         }
@@ -64,17 +64,17 @@ namespace Futura.BusinessOperations.Implementations
         #region Private Methods
         private bool CustomerIsExist(string customerId)
         {
-            return _unitOfWork.RepositoryFor<Entities.Customer>().Get(c => c.Id.ToLower() == customerId.ToLower()).Any();
+            return _unitOfWork.RepositoryFor<Entities.Customer>().Get(c => c.CustomerId.ToLower() == customerId.ToLower()).Any();
         }
 
         private bool OrderIsExist(string customerId, DateTime orderDate)
         {
-            return _unitOfWork.RepositoryFor<Entities.Order>().Get(o => o.CustomerId.ToLower() == customerId.ToLower() && o.OrderDate == orderDate).Any();
+            return _unitOfWork.RepositoryFor<Entities.Order>().Get(o => o.Customer.CustomerId.ToLower() == customerId.ToLower() && o.OrderDate == orderDate).Any();
         }
 
         private bool CustomerFound(string customerId)
         {
-            return _unitOfWork.RepositoryFor<Entities.Customer>().Get(c => c.Id.ToLower() == customerId.ToLower()).Any();
+            return _unitOfWork.RepositoryFor<Entities.Customer>().Get(c => c.CustomerId.ToLower() == customerId.ToLower()).Any();
         }
 
         public List<Entities.Customer> InsertXmlCustomers(List<XmlModels.Customer> customers)
@@ -108,6 +108,8 @@ namespace Futura.BusinessOperations.Implementations
                 //Check if order customer not found
                 if (!CustomerFound(order.CustomerID)) continue;
 
+                //GetHashCode customerGuid
+                order.CustomerGuid = GetCustomerGuid(order.CustomerID);
                 //insert order
                 var orderEntity = Mapper.Map<Entities.Order>(order);
                 ordersToInsert.Add(orderEntity);
@@ -116,6 +118,11 @@ namespace Futura.BusinessOperations.Implementations
             _unitOfWork.SaveChanges();
 
             return ordersToInsert;
+        }
+
+        private Guid GetCustomerGuid(string customerId)
+        {
+            return _unitOfWork.RepositoryFor<Entities.Customer>().Get(filter: filter => filter.CustomerId.ToLower() == customerId.ToLower()).Select(selector => selector.Id).FirstOrDefault();
         }
 
         #endregion

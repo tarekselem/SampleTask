@@ -48,7 +48,7 @@ namespace Futura.DataAccess.EF
             return entities;
         }
 
-        public virtual async Task<ICollection<TResult>> GetAsync<TResult>(Expression<Func<TEntity, TResult>> selector, Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, IList<Expression<Func<TEntity, object>>> includedProperties = null, int? pageIndex = null, int? pageSize = null)
+        public virtual async Task<ICollection<TResult>> GetAsync<TResult>(Expression<Func<TEntity, TResult>> selector = null, Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, IList<Expression<Func<TEntity, object>>> includedProperties = null, int? pageIndex = null, int? pageSize = null)
         {
             IQueryable<TEntity> entities = _entitySet;
             //Filtering
@@ -68,6 +68,7 @@ namespace Futura.DataAccess.EF
             if (pageIndex.HasValue && pageSize.HasValue) entities = orderBy(entities).Skip(pageSize.Value * pageIndex.Value).Take(pageSize.Value);
 
             return await entities.Select(selector).ToListAsync();
+
         }
 
         public virtual TEntity GetById(object id)
@@ -122,7 +123,7 @@ namespace Futura.DataAccess.EF
         {
             var attchedEntity = _entitySet.Attach(entity);
             if (attchedEntity == null) return false;
-            
+
             _context.Entry(entity).State = EntityState.Modified;
             return true;
         }
