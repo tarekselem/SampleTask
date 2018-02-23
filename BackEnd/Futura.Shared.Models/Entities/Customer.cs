@@ -10,6 +10,7 @@ namespace Entities
             Orders = new HashSet<Order>();
         }
 
+        [Required]
         public string CustomerId { get; set; }
         [Required]
         public string CompanyName { get; set; }

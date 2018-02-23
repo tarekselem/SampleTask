@@ -21,9 +21,9 @@ namespace Futura.Services.API.Controllers
 
         #region GET Actions
         [HttpGet]
-        public async Task<IHttpActionResult> Get(int pageIndex, int pageSize, string keyword = null)
+        public async Task<IHttpActionResult> Get(int pageNumber, int pageSize, string keyword = null)
         {
-            var result = await _ordersManager.Get(pageIndex, pageSize, keyword);
+            var result = await _ordersManager.Get(pageNumber--, pageSize, keyword);
             return Ok(result);
         }
 
