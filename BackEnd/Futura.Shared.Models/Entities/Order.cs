@@ -6,13 +6,6 @@ namespace Entities
 {
     public class Order : BaseEntity
     {
-        public Order()
-        {
-            Id = Guid.NewGuid();
-        }
-
-        [Key]
-        public Guid Id { get; set; }
         public int EmployeeId { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime RequiredDate { get; set; }
@@ -32,7 +25,7 @@ namespace Entities
         [Required]
         public string ShipCountry { get; set; }
 
-        public string CustomerId { get; set; }
+        public Guid CustomerId { get; set; }
         [ForeignKey("CustomerId")]
         public virtual Customer Customer { get; set; }
 

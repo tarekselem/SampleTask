@@ -11,7 +11,7 @@ namespace Futura.BusinessOperations.Configurations
             {
                 #region From XML to Entity
                 config.CreateMap<XmlModels.Customer, Entities.Customer>()
-                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.CustomerID))
+                .ForMember(dest => dest.CustomerId, opts => opts.MapFrom(src => src.CustomerID))
                 .ForMember(dest => dest.ContactTile, opts => opts.MapFrom(src => src.ContactTitle))
                 .ForMember(dest => dest.Address, opts => opts.MapFrom(src => src.FullAddress.Address))
                 .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.FullAddress.City))
@@ -20,7 +20,8 @@ namespace Futura.BusinessOperations.Configurations
                 .ForMember(dest => dest.Country, opts => opts.MapFrom(src => src.FullAddress.Country));
 
                 config.CreateMap<XmlModels.Order, Entities.Order>()
-                .ForMember(dest => dest.CustomerId, opts => opts.MapFrom(src => src.CustomerID))
+                //.ForMember(dest => dest.Customer, opts => opts.ResolveUsing(model => new Entities.Customer { CustomerId = model.CustomerID }))
+                .ForMember(dest => dest.CustomerId, opts => opts.MapFrom(src => src.CustomerGuid))
                 .ForMember(dest => dest.ShippedDate, opts => opts.MapFrom(src => src.ShipInfo.ShippedDate == DateTime.MinValue ? new DateTime(1900, 1, 1) : src.ShipInfo.ShippedDate))
                 .ForMember(dest => dest.ShipVia, opts => opts.MapFrom(src => src.ShipInfo.ShipVia))
                 .ForMember(dest => dest.Freight, opts => opts.MapFrom(src => src.ShipInfo.Freight))
@@ -37,7 +38,7 @@ namespace Futura.BusinessOperations.Configurations
                 #endregion
 
                 #region From Entity to View Model
-                config.CreateMap<Entities.Customer,ViewModels.CustomerDetails>();
+                config.CreateMap<Entities.Customer, ViewModels.CustomerDetails>();
                 #endregion
 
             });

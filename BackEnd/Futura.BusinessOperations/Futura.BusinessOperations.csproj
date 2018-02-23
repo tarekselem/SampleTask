@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configurations\MappingConfigurations.cs" />
+    <Compile Include="Helpers\XmlMigrationHelper.cs" />
     <Compile Include="Implementations\CustomersManager.cs" />
     <Compile Include="Implementations\OrdersManager.cs" />
     <Compile Include="Implementations\XmlMigrationManager.cs" />

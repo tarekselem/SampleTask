@@ -22,5 +22,8 @@ namespace XmlModels
         [XmlElement(ElementName = "ShipInfo")]
         public ShipInfo ShipInfo { get; set; }
 
+        [XmlIgnore]
+        public Guid CustomerGuid { get; set; }
+
     }
 }

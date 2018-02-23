@@ -1,9 +1,12 @@
 ﻿
+using System;
+
 namespace BindingModels
 {
     public class Customer
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
+        public string CustomerId { get; set; }
         public string CompanyName { get; set; }
         public string ContactName { get; set; }
         public string ContactTile { get; set; }
