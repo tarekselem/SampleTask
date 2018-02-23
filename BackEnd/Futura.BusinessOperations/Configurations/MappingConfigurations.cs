@@ -35,10 +35,13 @@ namespace Futura.BusinessOperations.Configurations
 
                 #region From Binding Models to Entity
                 config.CreateMap<BindingModels.Customer, Entities.Customer>();
+                config.CreateMap<BindingModels.Order, Entities.Order>();
                 #endregion
 
                 #region From Entity to View Model
                 config.CreateMap<Entities.Customer, ViewModels.CustomerDetails>();
+                config.CreateMap<Entities.Order, ViewModels.Order>()
+                .ForMember(dest => dest.CustomerName, opts => opts.MapFrom(src => src.Customer.ContactName));
                 #endregion
 
             });
