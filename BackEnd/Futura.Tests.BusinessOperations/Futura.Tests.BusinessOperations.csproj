@@ -69,6 +69,7 @@
     <Compile Include="CustomersManagerTests.cs" />
     <Compile Include="OrdersManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestsSetUp.cs" />
     <Compile Include="XmlMigrationManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>

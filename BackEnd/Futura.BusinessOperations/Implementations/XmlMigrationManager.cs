@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Futura.BusinessOperations.Implementations
@@ -29,21 +30,40 @@ namespace Futura.BusinessOperations.Implementations
             return null;
         }
 
-        public void ImportXml(string xmlData)
+        public ViewModels.ImportedXmlRecords ImportXml(BindingModels.FileUpload xmlFile)
         {
+            if (xmlFile == null) throw new ArgumentNullException(nameof(xmlFile));
+
+            if (xmlFile.FileBase64 == string.Empty) throw new Exception("Cannot accept an empty file.");
+
             XmlModels.Customers customers;
             XmlModels.Orders orders;
+            byte[] toDecodeByte = Convert.FromBase64String(xmlFile.FileBase64);
 
-            using (StreamReader reader = new StreamReader(xmlData))
+            using (var stream = new MemoryStream(toDecodeByte))
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(XmlModels.Root));
-                var deserializedXmlRoot = (XmlModels.Root)serializer.Deserialize(reader);
-                customers = deserializedXmlRoot.Customers;
-                orders = deserializedXmlRoot.Orders;
+                using (XmlReader reader = XmlReader.Create(stream))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(XmlModels.Root));
+                    var deserializedXmlRoot = (XmlModels.Root)serializer.Deserialize(reader);
+                    customers = deserializedXmlRoot.Customers;
+                    orders = deserializedXmlRoot.Orders;
 
-                //check if has data
-                if (customers == null && orders == null) throw new Exception("No Customers nor Orders XML data found.");
+                    //check if has data
+                    if (customers == null && orders == null) throw new Exception("No Customers nor Orders XML data found.");
+                }
             }
+
+            //using (StreamReader reader = new StreamReader("Customers-Orders.xml"))
+            //{
+            //    XmlSerializer serializer = new XmlSerializer(typeof(XmlModels.Root));
+            //    var deserializedXmlRoot = (XmlModels.Root)serializer.Deserialize(reader);
+            //    customers = deserializedXmlRoot.Customers;
+            //    orders = deserializedXmlRoot.Orders;
+
+            //    //check if has data
+            //    if (customers == null && orders == null) throw new Exception("No Customers nor Orders XML data found.");
+            //}
 
             //using (TextReader reader = new StringReader(xmlData))
             //{
@@ -56,8 +76,10 @@ namespace Futura.BusinessOperations.Implementations
             //    if (customers == null && orders == null) throw new Exception("No Customers nor Orders XML data found.");
             //}
 
-            InsertXmlCustomers(customers.Customer);
-            InsertXmlOrders(orders.Order);
+            var insertedCustomers = InsertXmlCustomers(customers.Customer);
+            var insertedOrders = InsertXmlOrders(orders.Order);
+
+            return new ViewModels.ImportedXmlRecords { CustomersCount = insertedCustomers, OrdersCount = insertedOrders };
         }
         #endregion
 
@@ -122,12 +144,12 @@ namespace Futura.BusinessOperations.Implementations
             }
 
             _unitOfWork.RepositoryFor<Entities.Order>().BulkInsert(ordersToInsert);
-            if (ordersToInsert.Count>0) _unitOfWork.SaveChanges();
+            if (ordersToInsert.Count > 0) _unitOfWork.SaveChanges();
 
             return ordersToInsert.Count;
         }
 
-        
+
 
         #endregion
 

@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingModels\Customer.cs" />
+    <Compile Include="BindingModels\FileUpload.cs" />
     <Compile Include="BindingModels\Order.cs" />
     <Compile Include="Entities\BaseEntity.cs" />
     <Compile Include="Entities\Customer.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="ViewModels\CustomerDetails.cs" />
     <Compile Include="ViewModels\CustomersList.cs" />
     <Compile Include="ViewModels\Customer.cs" />
+    <Compile Include="ViewModels\ImportedXmlRecords.cs" />
     <Compile Include="ViewModels\Order.cs" />
     <Compile Include="ViewModels\OrderDetails.cs" />
     <Compile Include="ViewModels\OrdersList.cs" />
