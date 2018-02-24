@@ -4,7 +4,7 @@ namespace Futura.BusinessOperations.Interfaces
 {
     public interface IXmlMigrationManager
     {
-        void ImportXml(string xmlFilePath);
+        ViewModels.ImportedXmlRecords ImportXml(BindingModels.FileUpload xmlFile);
         object ExportXml();
     }
 }

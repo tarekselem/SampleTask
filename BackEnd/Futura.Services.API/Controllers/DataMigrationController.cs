@@ -1,5 +1,4 @@
 ﻿using Futura.BusinessOperations.Interfaces;
-using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace Futura.Services.API.Controllers
@@ -28,10 +27,10 @@ namespace Futura.Services.API.Controllers
 
         #region POST Actions
         [HttpPost(), Route("XML")]
-        public IHttpActionResult Import(string id)
+        public IHttpActionResult Import([FromBody] BindingModels.FileUpload xmlFile)
         {
-            _xmlMigrationManager.ImportXml(id);
-            return Ok();
+            var result = _xmlMigrationManager.ImportXml(xmlFile);
+            return Ok($"Total inserted Customers: {result.CustomersCount} , Total inserted Orders: {result.OrdersCount}");
         }
         #endregion
     }

@@ -23,7 +23,7 @@ namespace Futura.Services.API.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> Get(int pageNumber, int pageSize, string keyword = null)
         {
-            var result = await _ordersManager.Get(pageNumber--, pageSize, keyword);
+            var result = await _ordersManager.Get(--pageNumber, pageSize, keyword);
             return Ok(result);
         }
 

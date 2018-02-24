@@ -20,7 +20,7 @@ namespace Futura.Services.API.Controllers
         public IEnumerable<string> Get()
 
         {
-            _manager.ImportXml("Customers-Orders.xml");
+           // _manager.ImportXml("Customers-Orders.xml");
 
 
             return new string[] { "value1", "value2" };

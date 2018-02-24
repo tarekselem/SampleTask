@@ -1,5 +1,4 @@
-﻿using Futura.BusinessOperations.Configurations;
-using Futura.BusinessOperations.Implementations;
+﻿using Futura.BusinessOperations.Implementations;
 using Futura.BusinessOperations.Interfaces;
 using Futura.DataAccess.Common;
 using Moq;
@@ -19,10 +18,7 @@ namespace Futura.Tests.BusinessOperations
         {
             _unitOfWork = new Mock<IUnitOfWork>();
             _ordersManager = new OrdersManager(_unitOfWork.Object);
-            MappingConfigurations.Configure();
         }
-
-
 
         [TestCase(true)] // passing null
         [TestCase(false)] // passing binding model
