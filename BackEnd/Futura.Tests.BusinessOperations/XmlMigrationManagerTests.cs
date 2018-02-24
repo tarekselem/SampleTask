@@ -31,7 +31,7 @@ namespace Futura.Tests.BusinessOperations
             try
             {
                 //Act
-                _xmlMigrationManager.ImportXml(xml);
+                //_xmlMigrationManager.ImportXml(xml);
                 Assert.Fail();
             }
             catch (Exception ex)
